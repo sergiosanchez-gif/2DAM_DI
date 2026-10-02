@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Fans - Manchester United</title>
+    <style>
+        body {
+            background-image: url('manchesterUtd.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #DA291C;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.65);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: rgba(218, 41, 28, 0.85);
+            border: 4px solid #FBE122;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header h1 {
+            color: #FBE122;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            margin-top: 0;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+        }
+
+        .counters-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        section {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #ffffff;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        output {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .total-output {
+            background-color: rgba(0, 0, 0, 0.8);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 10px;
+            border: 2px solid #FBE122;
+            font-size: 3rem;
+            color: #ffffff;
+        }
+
+        button {
+            background-color: #FBE122;
+            color: #DA291C;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        button:hover {
+            background-color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-reset {
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            margin-top: 15px;
+            padding: 12px 25px;
+        }
+
+        .btn-reset:hover {
+            background-color: #333333;
+            color: #FBE122;
+            border-color: #FBE122;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="card">
+            
+            <header>
+                <h1>Contador de Fans</h1>
+                <output class="total-output" id="out-total">0 Fans</output>
+            </header>
+
+            <div class="counters-container">
+                <section>
+                    <h2>Hombres 🚹</h2>
+                    <output id="out-men">0</output>
+                    <div>
+                        <button onclick="changeMen(-1)">- 1</button>
+                        <button onclick="changeMen(1)">+ 1</button>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Mujeres 🚺</h2>
+                    <output id="out-women">0</output>
+                    <div>
+                        <button onclick="changeWomen(-1)">- 1</button>
+                        <button onclick="changeWomen(1)">+ 1</button>
+                    </div>
+                </section>
+            </div>
+
+            <button class="btn-reset" onclick="resetAll()">🔄 Reiniciar Contador</button>
+
+        </div>
+    </div>
+
+    <script>
+        let menCount = 0;
+        let womenCount = 0;
+
+        function updateUI() {
+            document.getElementById('out-men').textContent = menCount;
+            document.getElementById('out-women').textContent = womenCount;
+            
+            // Calcular total
+            let total = menCount + womenCount;
+            let totalOutput = document.getElementById('out-total');
+            
+            // Lógica gramatical (1 Fan vs X Fans)
+            if (total === 1) {
+                totalOutput.textContent = "1 Fan";
+            } else {
+                totalOutput.textContent = total + " Fans";
+            }
+        }
+
+        function changeMen(amount) {
+            if (menCount + amount >= 0) {
+                menCount += amount;
+                updateUI();
+            }
+        }
+
+        function changeWomen(amount) {
+            if (womenCount + amount >= 0) {
+                womenCount += amount;
+                updateUI();
+            }
+        }
+
+        function resetAll() {
+            menCount = 0;
+            womenCount = 0;
+            updateUI();
+        }
+    </script>
+</body>
+</html>
