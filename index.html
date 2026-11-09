@@ -6,11 +6,12 @@
     <title>Contador Fans - Manchester United</title>
     <style>
         body {
-            background-image: url('manchesterUtd.jpg');
+            /* Como no tengo la imagen local, añado un color sólido oscuro y un degradado de respaldo, pero dejo tu imagen por si la usas */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('manchesterUtd.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-color: #DA291C;
+            background-color: #1a1a1a;
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
@@ -18,7 +19,6 @@
         }
 
         .overlay {
-            background-color: rgba(0, 0, 0, 0.65);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -28,12 +28,12 @@
         }
 
         .card {
-            background-color: rgba(218, 41, 28, 0.85);
-            border: 4px solid #FBE122;
+            background-color: rgba(218, 41, 28, 0.9); /* Rojo Manchester United */
+            border: 4px solid #FBE122; /* Amarillo */
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.9);
             max-width: 600px;
             width: 100%;
         }
@@ -46,6 +46,39 @@
             text-transform: uppercase;
         }
 
+        /* Contenedor del Aforo / Límite de Socios */
+        .capacity-container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px dashed #FBE122;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .capacity-container label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .capacity-container input {
+            font-size: 1.2rem;
+            padding: 8px;
+            width: 120px;
+            border-radius: 8px;
+            border: 2px solid #FBE122;
+            background-color: #ffffff;
+            color: #DA291C;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+        }
+
         .counters-container {
             display: flex;
             flex-wrap: wrap;
@@ -55,25 +88,27 @@
         }
 
         section {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 20px;
             border-radius: 12px;
             flex: 1;
             min-width: 200px;
             border: 1px solid #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
 
         section h2 {
             margin-top: 0;
             font-size: 1.5rem;
+            color: #FBE122;
         }
 
         output {
             display: block;
-            font-size: 2.5rem;
+            font-size: 2rem; /* Ligeramente reducido para que quepa bien el texto */
             font-weight: bold;
             margin: 15px 0;
-            text-shadow: 1px 1px 3px #000;
+            text-shadow: 2px 2px 4px #000;
         }
 
         .total-output {
@@ -82,8 +117,9 @@
             padding: 10px 30px;
             border-radius: 10px;
             border: 2px solid #FBE122;
-            font-size: 3rem;
+            font-size: 2.8rem;
             color: #ffffff;
+            margin-top: 10px;
         }
 
         button {
@@ -115,6 +151,7 @@
             border: 2px solid #ffffff;
             margin-top: 15px;
             padding: 12px 25px;
+            width: 100%;
         }
 
         .btn-reset:hover {
@@ -122,21 +159,61 @@
             color: #FBE122;
             border-color: #FBE122;
         }
+
+        /* Diseño de la alerta personalizada (Aforo Máximo) */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background-color: #FBE122;
+            color: #DA291C;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            border: 2px solid #DA291C;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .custom-alert.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
     </style>
 </head>
 <body>
+    <!-- Alerta personalizada -->
+    <div id="alert-box" class="custom-alert">
+        ⚽ ¡Aforo máximo alcanzado! No caben más socios en el estadio.
+    </div>
+
     <div class="overlay">
         <div class="card">
             
             <header>
-                <h1>Contador de Fans</h1>
+                <h1>Contador de Socios</h1>
                 <output class="total-output" id="out-total">0 Fans</output>
             </header>
 
+            <!-- Nueva sección: Aforo Máximo -->
+            <div class="capacity-container">
+                <label for="max-capacity">Aforo Máximo de Old Trafford:</label>
+                <!-- Por defecto ponemos la capacidad de Old Trafford -->
+                <input type="number" id="max-capacity" value="74310" min="1">
+            </div>
+
             <div class="counters-container">
                 <section>
-                    <h2>Hombres 🚹</h2>
-                    <output id="out-men">0</output>
+                    <h2>🚹 Hombres</h2>
+                    <output id="out-men">0 Hombres</output>
                     <div>
                         <button onclick="changeMen(-1)">- 1</button>
                         <button onclick="changeMen(1)">+ 1</button>
@@ -144,8 +221,8 @@
                 </section>
 
                 <section>
-                    <h2>Mujeres 🚺</h2>
-                    <output id="out-women">0</output>
+                    <h2>🚺 Mujeres</h2>
+                    <output id="out-women">0 Mujeres</output>
                     <div>
                         <button onclick="changeWomen(-1)">- 1</button>
                         <button onclick="changeWomen(1)">+ 1</button>
@@ -162,15 +239,41 @@
         let menCount = 0;
         let womenCount = 0;
 
+        // Función para mostrar la alerta personalizada
+        function showCustomAlert(message) {
+            const alertBox = document.getElementById('alert-box');
+            alertBox.textContent = message;
+            alertBox.classList.add('show');
+            
+            // Ocultar automáticamente después de 3 segundos
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 3000);
+        }
+
         function updateUI() {
-            document.getElementById('out-men').textContent = menCount;
-            document.getElementById('out-women').textContent = womenCount;
+            let menOutput = document.getElementById('out-men');
+            let womenOutput = document.getElementById('out-women');
+            let totalOutput = document.getElementById('out-total');
+            
+            // Lógica gramatical Hombres (1 vs Muchos)
+            if (menCount === 1) {
+                menOutput.textContent = "1 Hombre";
+            } else {
+                menOutput.textContent = menCount + " Hombres";
+            }
+
+            // Lógica gramatical Mujeres (1 vs Muchas)
+            if (womenCount === 1) {
+                womenOutput.textContent = "1 Mujer";
+            } else {
+                womenOutput.textContent = womenCount + " Mujeres";
+            }
             
             // Calcular total
             let total = menCount + womenCount;
-            let totalOutput = document.getElementById('out-total');
             
-            // Lógica gramatical (1 Fan vs X Fans)
+            // Lógica gramatical Total (1 Fan vs X Fans)
             if (total === 1) {
                 totalOutput.textContent = "1 Fan";
             } else {
@@ -178,7 +281,30 @@
             }
         }
 
+        // Función para comprobar si se supera el aforo al intentar añadir
+        function canAddMore(amount) {
+            let maxCapacity = parseInt(document.getElementById('max-capacity').value);
+            let total = menCount + womenCount;
+            
+            // Si el aforo está vacío o es inválido, asumimos que no hay límite (Infinito)
+            if (isNaN(maxCapacity) || maxCapacity <= 0) {
+                maxCapacity = Infinity; 
+            }
+
+            // Solo comprobamos el límite si estamos SUMANDO
+            if (amount > 0 && (total + amount) > maxCapacity) {
+                showCustomAlert("⚽ ¡Aforo máximo alcanzado! No caben más socios en el estadio.");
+                return false;
+            }
+            return true;
+        }
+
         function changeMen(amount) {
+            // Verificar si podemos añadir antes de hacer nada
+            if (amount > 0 && !canAddMore(amount)) {
+                return; // Si no caben más, detenemos la función
+            }
+
             if (menCount + amount >= 0) {
                 menCount += amount;
                 updateUI();
@@ -186,6 +312,11 @@
         }
 
         function changeWomen(amount) {
+            // Verificar si podemos añadir antes de hacer nada
+            if (amount > 0 && !canAddMore(amount)) {
+                return; // Si no caben más, detenemos la función
+            }
+
             if (womenCount + amount >= 0) {
                 womenCount += amount;
                 updateUI();
@@ -197,6 +328,9 @@
             womenCount = 0;
             updateUI();
         }
+
+        // Inicializamos la interfaz para que cargue los textos con "0 Hombres", "0 Mujeres" etc.
+        updateUI();
     </script>
 </body>
 </html>
